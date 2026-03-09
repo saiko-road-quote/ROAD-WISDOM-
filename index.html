@@ -1,180 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Road Wisdom</title>
-<style>
-body{
-  margin:0;
-  font-family:Arial;
-  text-align:center;
-  background:#f5f5f5;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-.container{
-  background:rgba(255,255,255,0.9);
-  padding:40px;
-  border-radius:15px;
-  max-width:700px;
-}
-.title{
-  font-size:26px;
-  margin-bottom:30px;
-}
-.quote{
-  font-size:28px;
-  line-height:1.6;
-  margin-bottom:30px;
-}
-button{
-  padding:12px 30px;
-  font-size:16px;
-  border:none;
-  border-radius:8px;
-  background:#e60012;
-  color:white;
-  cursor:pointer;
-  margin-bottom:10px;
-}
-button:hover{
-  opacity:0.85;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Road Wisdom</title>
+  <style>
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      text-align:center;
+      background:#f5f5f5;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .container{
+      background:rgba(255,255,255,0.92);
+      padding:40px 28px;
+      border-radius:16px;
+      max-width:760px;
+      width:90%;
+      box-shadow:0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .title{
+      font-size:28px;
+      margin-bottom:28px;
+      font-weight:700;
+    }
+
+    .quote{
+      font-size:28px;
+      line-height:1.7;
+      margin-bottom:28px;
+      min-height:160px;
+    }
+
+    button{
+      padding:12px 28px;
+      font-size:16px;
+      border:none;
+      border-radius:10px;
+      background:#e60012;
+      color:white;
+      cursor:pointer;
+    }
+
+    button:hover{
+      opacity:0.9;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <div class="title">🚗 Today's Road Wisdom</div>
-    <div class="quote" id="quote"></div>
-    <button onclick="newQuote()">再来一句</button>
+    <div class="quote" id="quote">Loading...</div>
+    <button id="newQuoteBtn">再来一句</button>
   </div>
 
-<script>
+  <script>
+    const quotes = [
+      "Take it slow, life is not a race.<br>慢一点，人生不是比赛。<br>Perlahankan langkah, hidup bukan perlumbaan.",
+      "Maybe the sky has an answer today.<br>也许今天的天空有答案。<br>Mungkin langit hari ini ada jawapannya.",
+      "Every road has a story.<br>每一条路都有故事。<br>Setiap jalan ada ceritanya.",
+      "Some songs arrive exactly when we need them.<br>有些歌，总是在刚好的时候出现。<br>Ada lagu yang datang tepat ketika kita memerlukannya.",
+      "The sky is always wider than worries.<br>天空总比烦恼更大。<br>Langit lebih luas daripada kerisauan."
+    ];
 
-var quotes = [
+    let lastIndex = -1;
 
-"Take it slow, life is not a race.<br>慢一点，人生不是比赛。<br>Perlahankan langkah, hidup bukan perlumbaan.",
-"Maybe the sky has an answer today.<br>也许今天的天空有答案。<br>Mungkin langit hari ini ada jawapannya.",
-"Traffic jam is just the city thinking slowly.<br>塞车只是城市在慢慢思考。<br>Trafik jem hanyalah bandar yang berfikir perlahan.",
-"Some songs arrive exactly when we need them.<br>有些歌，总是在刚好的时候出现。<br>Ada lagu yang datang tepat ketika kita memerlukannya.",
-"Look up. The sky is still there.<br>抬头看看，天空一直都在。<br>Pandang ke atas, langit masih ada.",
-"Every road has a story.<br>每一条路都有故事。<br>Setiap jalan ada ceritanya.",
-"Sometimes the journey is the answer.<br>有时候，旅程本身就是答案。<br>Kadang perjalanan itu sendiri adalah jawapan.",
-"Music + road = therapy.<br>音乐加上路，就是疗愈。<br>Muzik dan jalan adalah terapi.",
-"The road outside moves slowly, but your thoughts travel far.<br>外面的车很慢，但思绪很远。<br>Jalan bergerak perlahan tetapi fikiran berjalan jauh.",
-"Maybe this pause is part of the journey.<br>也许这个停顿就是旅程的一部分。<br>Mungkin berhenti ini sebahagian perjalanan.",
-"Every red light is a moment to breathe.<br>每一个红灯，都是一个深呼吸的机会。<br>Setiap lampu merah adalah peluang untuk bernafas.",
-"The sky never rushes.<br>天空从不着急。<br>Langit tidak pernah tergesa.",
-"Traffic is temporary, stories are forever.<br>塞车是暂时的，故事是长久的。<br>Trafik sementara, cerita kekal.",
-"Some roads are meant to be slow.<br>有些路，本来就该慢慢走。<br>Ada jalan yang memang perlu perlahan.",
-"Maybe the road is teaching patience.<br>也许这条路在教你耐心。<br>Mungkin jalan ini mengajar kesabaran.",
-"Some thoughts only appear on the road.<br>有些想法，只会在路上出现。<br>Ada fikiran hanya muncul di jalan.",
-"The sky looks different from a car window.<br>从车窗看天空，总是不一样。<br>Langit kelihatan berbeza dari tingkap kereta.",
-"Sometimes traffic gives you time to think.<br>有时候塞车，是给你思考的时间。<br>Kadang trafik memberi masa untuk berfikir.",
-"The road continues even when we pause.<br>即使停下来，路也会继续。<br>Jalan terus berjalan walaupun kita berhenti.",
-"Every kilometer is a small chapter.<br>每一公里，都是一个小章节。<br>Setiap kilometer adalah bab kecil.",
-"The road is long, but hope is longer.<br>路很长，希望更长。<br>Jalan panjang, harapan lebih panjang.",
-"Maybe today is meant to be slow.<br>也许今天就该慢一点。<br>Mungkin hari ini memang untuk perlahan.",
-"The sky understands silence.<br>天空懂得沉默。<br>Langit memahami kesunyian.",
-"Sometimes the road feels like freedom.<br>有时候，路像自由。<br>Kadang jalan terasa seperti kebebasan.",
-"The road is quiet, but thoughts are loud.<br>路很安静，但思绪很响。<br>Jalan sunyi tetapi fikiran bising.",
-"Even traffic has sunsets.<br>连塞车也有日落。<br>Malah trafik jem pun ada matahari terbenam.",
-"The road never asks questions.<br>路从不问问题。<br>Jalan tidak bertanya.",
-"Maybe the journey is fixing you.<br>也许这段旅程正在修复你。<br>Mungkin perjalanan ini sedang memperbaiki kamu.",
-"Some roads change people.<br>有些路会改变人。<br>Ada jalan yang mengubah manusia.",
-"The sky above the highway is always wide.<br>高速公路上的天空总是很宽。<br>Langit di atas lebuh raya sentiasa luas.",
-"Every road meets the horizon.<br>每条路都会遇见地平线。<br>Setiap jalan bertemu ufuk.",
-"Maybe the road knows where you're going.<br>也许路早就知道你要去哪里。<br>Mungkin jalan sudah tahu ke mana kamu pergi.",
-"Traffic jams teach patience.<br>塞车教人耐心。<br>Trafik jem mengajar kesabaran.",
-"Sometimes the sky answers quietly.<br>有时候天空会悄悄回答。<br>Kadang langit menjawab dengan senyap.",
-"The road outside reflects the road inside.<br>外面的路，是内心的影子。<br>Jalan luar mencerminkan jalan dalam diri.",
-"Some journeys are unexpected.<br>有些旅程是意想不到的。<br>Ada perjalanan yang tidak dijangka.",
-"Look around, everyone is on their story.<br>看看周围，每个人都在自己的故事里。<br>Lihat sekeliling, setiap orang ada ceritanya.",
-"Sometimes silence is the best passenger.<br>有时候沉默是最好的乘客。<br>Kadang diam adalah penumpang terbaik.",
-"The road is patient.<br>路很有耐心。<br>Jalan sangat sabar.",
-"The sky has no deadlines.<br>天空没有截止日期。<br>Langit tiada tarikh akhir.",
-"The road outside moves, so does life.<br>路在动，生活也在动。<br>Jalan bergerak, hidup juga.",
-"Every mile brings a new thought.<br>每一公里带来新的想法。<br>Setiap kilometer membawa fikiran baru.",
-"Sometimes the journey is quiet healing.<br>有时候旅程是安静的疗愈。<br>Kadang perjalanan menyembuhkan.",
-"The sky above the city is patient.<br>城市上方的天空很有耐心。<br>Langit di atas bandar sabar.",
-"Even traffic has its own rhythm.<br>塞车也有自己的节奏。<br>Trafik juga ada rentaknya.",
-"Every road eventually finds the horizon.<br>每条路最终都会遇见地平线。<br>Setiap jalan akhirnya bertemu ufuk.",
-"Some journeys are meant to change you.<br>有些旅程是为了改变你。<br>Ada perjalanan untuk mengubahmu.",
-"The sky is always wider than worries.<br>天空总比烦恼更大。<br>Langit lebih luas daripada kerisauan.",
-"Some days the road feels longer than usual.<br>有些日子，路会变得特别长。<br>Ada hari jalan terasa lebih panjang daripada biasa.",
-"The sky above traffic is still peaceful.<br>塞车上面的天空依然平静。<br>Langit di atas trafik tetap tenang.",
-"Sometimes a slow road saves a tired heart.<br>有时候慢一点的路，会救一颗疲惫的心。<br>Kadang jalan perlahan menyelamatkan hati yang letih.",
-"Every red light is a tiny pause from life.<br>每一个红灯，都是人生的小暂停。<br>Setiap lampu merah adalah rehat kecil dalam hidup.",
-"The road may be crowded, but the sky is always wide.<br>路也许很挤，但天空一直很大。<br>Jalan mungkin sesak tetapi langit sentiasa luas.",
-"Some journeys begin when the music starts.<br>有些旅程，是从音乐开始的。<br>Ada perjalanan bermula apabila muzik dimainkan.",
-"The road outside is noisy, the sky above is quiet.<br>路很吵，天空很安静。<br>Jalan bising tetapi langit tenang.",
-"Every turn might be a new story.<br>每一个转弯，也许都是新的故事。<br>Setiap selekoh mungkin cerita baru.",
-"Some roads lead forward, some roads lead inward.<br>有些路带你向前，有些路带你向内。<br>Ada jalan membawa ke hadapan, ada membawa ke dalam diri.",
-"The road doesn't hurry, and neither should you.<br>路从不着急，你也不用。<br>Jalan tidak tergesa, kamu juga tidak perlu.",
-"Traffic jams are just cities breathing slowly.<br>塞车，是城市在慢慢呼吸。<br>Trafik jem ialah bandar yang bernafas perlahan.",
-"Some answers appear between two traffic lights.<br>有些答案，出现在两个红灯之间。<br>Ada jawapan muncul antara dua lampu merah.",
-"Even the busiest road has a quiet sky above it.<br>再忙的路，上面也有安静的天空。<br>Jalan paling sibuk pun ada langit yang tenang.",
-"The road doesn't judge where you came from.<br>路从不问你从哪里来。<br>Jalan tidak menilai dari mana kamu datang.",
-"Some thoughts only arrive when the wheels keep turning.<br>有些想法，只有车轮转动时才会出现。<br>Ada fikiran muncul ketika roda berpusing.",
-"Sometimes traffic gives you time to listen to yourself.<br>有时候塞车，是给你听见自己的时间。<br>Kadang trafik memberi masa mendengar diri sendiri.",
-"Maybe the delay is protecting your timing.<br>也许这次延迟，是在保护你的时间。<br>Mungkin kelewatan ini melindungi waktumu.",
-"Every road eventually meets the horizon.<br>每一条路最后都会遇见地平线。<br>Setiap jalan akhirnya bertemu ufuk.",
-"The road is long, but the sky is patient.<br>路很长，但天空很有耐心。<br>Jalan panjang tetapi langit sabar.",
-"Some journeys exist between two songs.<br>有些旅程，只存在于两首歌之间。<br>Ada perjalanan wujud antara dua lagu.",
-"Look around, everyone has somewhere they miss.<br>看看四周，每个人都有想念的地方。<br>Lihat sekeliling, setiap orang ada tempat yang dirindui.",
-"The road outside reflects the road inside your heart.<br>外面的路，是内心那条路的影子。<br>Jalan luar mencerminkan jalan dalam hati.",
-"Some days the road feels endless, so does hope.<br>有些日子路很长，希望也是。<br>Ada hari jalan terasa panjang, begitu juga harapan.",
-"Sometimes we drive just to clear the weather inside.<br>有时候开车，是为了让心里的天气变好。<br>Kadang kita memandu untuk menenangkan hati.",
-"Maybe the road already knows where you belong.<br>也许路早就知道你会去哪里。<br>Mungkin jalan sudah tahu ke mana kamu pergi.",
-"Some thoughts appear between two red lights.<br>有些想法，只会出现在两个红灯之间。<br>Ada fikiran muncul antara dua lampu merah.",
-"The road moves slowly today, maybe life wants you to look around.<br>今天路很慢，也许生活想让你看看四周。<br>Hari ini jalan perlahan, mungkin hidup mahu kamu melihat sekeliling.",
-"Somewhere right now someone is seeing this sky for the first time.<br>此刻 somewhere 有人第一次看到这片天空。<br>Seseorang sedang melihat langit ini buat kali pertama.",
-"Even the busiest road has moments of stillness.<br>再忙的路，也会有安静的瞬间。<br>Jalan paling sibuk juga ada detik tenang.",
-"The road is full of strangers carrying invisible stories.<br>路上都是陌生人，但每个人都有故事。<br>Di jalan ada orang asing dengan cerita tersembunyi.",
-"Sometimes a long drive is a long conversation with yourself.<br>有时候长途驾驶，是和自己聊很久。<br>Kadang perjalanan jauh ialah berbual dengan diri sendiri.",
-"The sky above the highway has seen countless lives pass by.<br>高速公路上的天空，看过无数人生。<br>Langit di atas lebuh raya melihat banyak kehidupan berlalu."
-"The road never lies.<br>路从不说谎。<br>Jalan tidak pernah menipu.",
-"Even a quiet road carries many stories.<br>安静的路也有很多故事。<br>Jalan yang sunyi juga membawa banyak cerita.",
-"The horizon is calling you forward.<br>地平线在呼唤你向前。<br>Ufuk memanggilmu ke hadapan.",
-"Today might surprise you in a quiet way.<br>今天可能会悄悄带来惊喜。<br>Hari ini mungkin membawa kejutan kecil.",
-"The road always knows how to continue.<br>路总知道该怎么继续。<br>Jalan sentiasa tahu bagaimana untuk terus berjalan.",
-"Take this journey gently.<br>温柔地走这段路。<br>Lalui perjalanan ini dengan lembut.",
-"Some roads slowly change who we are.<br>有些路会慢慢改变我们。<br>Ada jalan yang perlahan mengubah kita.",
-"Even traffic has lessons hidden inside.<br>塞车里也藏着一些课。<br>Trafik jem juga menyimpan pelajaran.",
-"This moment on the road is enough.<br>这一刻的路已经很好。<br>Saat ini di jalan sudah cukup.",
-"Your road belongs only to you.<br>你的路只属于你。<br>Jalanmu hanya milikmu.",
-"Maybe the sky is quietly answering you.<br>也许天空正在悄悄回答你。<br>Mungkin langit sedang menjawabmu secara senyap.",
-"Drive safe, tomorrow is waiting.<br>安全驾驶，明天在等你。<br>Pandu dengan selamat, esok sedang menunggu.",
-"Every turn of the road writes a new line of your story.<br>每个转弯都在写新的故事。<br>Setiap selekoh menulis cerita baru.",
-"Look ahead, the road is still unfolding.<br>向前看，路还在展开。<br>Pandang ke hadapan, jalan masih terbuka.",
-"Keep moving, life moves with you.<br>继续走，生活也在走。<br>Terus bergerak, hidup juga bergerak.",
-"Some roads are quiet teachers of patience.<br>有些路是耐心的老师。<br>Ada jalan yang menjadi guru kesabaran.",
-"The sky above you has room for every dream.<br>天空有足够的空间装下梦想。<br>Langit mempunyai ruang untuk setiap impian.",
-"Sometimes the road is where clarity appears.<br>有时候答案会在路上出现。<br>Kadang jawapan muncul di jalan.",
-"The journey continues even when the day feels long.<br>即使今天很长，旅程还在继续。<br>Walaupun hari terasa panjang, perjalanan tetap berjalan.",
-"A calm road can calm the heart too.<br>安静的路也会让心安静。<br>Jalan yang tenang juga menenangkan hati.",
-"Every journey begins with a single decision to move.<br>每段旅程始于一个出发的决定。<br>Setiap perjalanan bermula dengan satu keputusan untuk bergerak."
-var lastIndex = -1;
+    function newQuote() {
+      let random;
+      do {
+        random = Math.floor(Math.random() * quotes.length);
+      } while (quotes.length > 1 && random === lastIndex);
 
-function newQuote(){
+      lastIndex = random;
+      document.getElementById("quote").innerHTML = quotes[random];
+    }
 
-var random;
+    document.getElementById("newQuoteBtn").addEventListener("click", newQuote);
 
-do{
-random = Math.floor(Math.random()*quotes.length);
-} while(random === lastIndex);
-
-lastIndex = random;
-
-document.getElementById("quote").innerHTML = quotes[random];
-
-}
-
-newQuote();
-
-</script>
-
+    newQuote();
+  </script>
 </body>
-
 </html>
