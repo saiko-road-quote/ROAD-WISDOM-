@@ -59,11 +59,16 @@
 margin-top:30px;
 display:flex;
 justify-content:center;
+align-items:center;
 gap:40px;
 }
 
 .logos img{
-height:40px;
+height:70px;
+object-fit:contain;
+background:rgba(255,255,255,0.7);
+padding:6px 10px;
+border-radius:8px;
 }
   </style>
 
@@ -80,7 +85,7 @@ height:40px;
   </div>
 
   <script>
-    const quotes = [
+const quotes = [
 
 "Take it slow, life is not a race.<br>慢一点，人生不是比赛。<br>Perlahankan langkah, hidup bukan perlumbaan.",
 
@@ -301,9 +306,8 @@ height:40px;
 "Your journey is uniquely yours.<br>你的旅程只属于你。<br>Perjalananmu milikmu.",
 
 "Keep moving, life moves too.<br>继续前进，人生也在前进。<br>Terus bergerak, hidup juga bergerak."
-
 ];
-    // 洗牌函数
+
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -311,24 +315,29 @@ function shuffle(array) {
   }
 }
 
-// 创建一份洗牌列表
 let shuffledQuotes = [...quotes];
 shuffle(shuffledQuotes);
+let currentIndex = 0;
 
-let index = 0;
-
-function newQuote(){
-
-  if(index >= shuffledQuotes.length){
+function newQuote() {
+  if (currentIndex >= shuffledQuotes.length) {
+    shuffledQuotes = [...quotes];
     shuffle(shuffledQuotes);
-    index = 0;
+    currentIndex = 0;
   }
 
-  document.getElementById("quote").innerHTML = shuffledQuotes[index];
-  index++;
+  const quoteEl = document.getElementById("quote");
+  if (quoteEl) {
+    quoteEl.innerHTML = shuffledQuotes[currentIndex];
+    currentIndex++;
+  }
+}
 
+const btn = document.getElementById("newQuoteBtn");
+if (btn) {
+  btn.addEventListener("click", newQuote);
 }
 
 newQuote();
-
 </script>
+
